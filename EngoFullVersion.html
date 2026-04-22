@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engosoft IT Inventory Report</title>
+<style>
+* { box-sizing: border-box; }
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: #fff;
+    margin: 0;
+}
+
+header {
+    background: linear-gradient(90deg, #0ea5e9, #22c55e);
+    padding: 15px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+@media (min-width: 768px) {
+    header { font-size: 28px; }
+}
+
+.container {
+    padding: 15px;
+}
+
+.card {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.card h2 {
+    cursor: pointer;
+    font-size: 16px;
+}
+
+@media (min-width: 768px) {
+    .card h2 { font-size: 20px; }
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    min-width: 400px;
+}
+
+th, td {
+    padding: 8px;
+    border-bottom: 1px solid #334155;
+    text-align: left;
+    font-size: 12px;
+}
+
+@media (min-width: 768px) {
+    th, td { font-size: 14px; padding: 10px; }
+}
+
+tr:hover {
+    background: #334155;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+@media (min-width: 600px) {
+    .summary { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1024px) {
+    .summary { grid-template-columns: repeat(5, 1fr); }
+}
+
+.box {
+    background: #22c55e;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.hidden {
+    display: none;
+}
+
+button {
+    background: #0ea5e9;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+}
+</style>
+
+<script>
+function toggle(id){
+    var x = document.getElementById(id);
+    x.classList.toggle("hidden");
+}
+</script>
+
+</head>
+
+<body>
+
+<header>Engosoft IT Inventory Report 🚀</header>
+
+<div class="container">
+
+<div class="summary">
+    <div class="box">Total PCs: 23</div>
+    <div class="box">Printers: 1</div>
+    <div class="box">Cameras: 34</div>
+    <div class="box">DVR: 4</div>
+    <div class="box">Switches: 7</div>
+    <div class="box">Keyboards: 80</div>
+</div>
+
+<div class="card">
+<h2 onclick="toggle('pcs')">💻 PCs</h2>
+<div id="pcs" class="hidden table-wrapper">
+<table>
+<tr><th>Model</th><th>Count</th></tr>
+<tr><td>HP Compaq 8300</td><td>10</td></tr>
+<tr><td>HP Compaq 6305</td><td>3</td></tr>
+<tr><td>HP Compaq 4300</td><td>1</td></tr>
+<tr><td>HP Z400</td><td>1</td></tr>
+<tr><td>HP Pro 3500</td><td>1</td></tr>
+<tr><td>Dell Optiplex 9010</td><td>1</td></tr>
+<tr><td>Generic</td><td>7</td></tr>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h2 onclick="toggle('printers')">🖨 Printers</h2>
+<div id="printers" class="hidden table-wrapper">
+<table>
+<tr><th>Model</th><th>Serial</th></tr>
+<tr><td>Brother</td><td>A78664B0H447506</td></tr>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h2 onclick="toggle('cams')">📷 Cameras & DVR</h2>
+<div id="cams" class="hidden table-wrapper">
+<table>
+<tr><th>Type</th><th>Model</th></tr>
+<tr><td>DVR</td><td>Hikvision 774443858</td></tr>
+<tr><td>DVR</td><td>Unknown</td></tr>
+<tr><td>DVR</td><td>Unknown</td></tr>
+<tr><td>DVR</td><td>Unknown</td></tr>
+<tr><td>Hikvision Camera</td><td>Multiple Models (34 units)</td></tr>
+<tr><td>Magtrade Camera</td><td>349-4 (4 units)</td></tr>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h2 onclick="toggle('switches')">🔌 Switches</h2>
+<div id="switches" class="hidden table-wrapper">
+<table>
+<tr><th>Brand</th><th>Model</th><th>Ports</th><th>Count</th></tr>
+<tr><td>Linksys</td><td>LGS124V2</td><td>24</td><td>2</td></tr>
+<tr><td>Linksys</td><td>LGS116</td><td>16</td><td>2</td></tr>
+<tr><td>TP-Link</td><td>LGSG1024D</td><td>24</td><td>1</td></tr>
+<tr><td>D-Link</td><td>DAS1016D</td><td>16</td><td>2</td></tr>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h2 onclick="toggle('kb')">⌨ Keyboards</h2>
+<div id="kb" class="hidden table-wrapper">
+<table>
+<tr><th>Brand</th><th>Count</th></tr>
+<tr><td>Dell</td><td>16</td></tr>
+<tr><td>Microsoft Wireless</td><td>6</td></tr>
+<tr><td>Unknown</td><td>25</td></tr>
+<tr><td>Logitech</td><td>2</td></tr>
+<tr><td>Lenovo</td><td>4</td></tr>
+<tr><td>HP</td><td>27</td></tr>
+</table>
+</div>
+</div>
+
+</div>
+
+
+<footer style="text-align:center; padding:20px; margin-top:20px; background:#020617; border-top:1px solid #334155; font-size:14px;">
+    <p>👨‍💻 This report was prepared by the IT Team under the supervision of the IT Manager</p>
+    <p>Prepared by: <strong>Mostafa Morsi</strong></p>
+    <p>IT Manager: <strong>Hassan Waheed</strong></p>
+</footer>
+
+</body>
+</html>
