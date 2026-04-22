@@ -1,3 +1,5 @@
+Here is the complete HTML code that combines your original inventory report with a password-protected login screen.
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,6 +16,67 @@ body {
     margin: 0;
 }
 
+/* 🔐 Login Screen Overlay */
+#loginScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #020617;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 9999;
+    backdrop-filter: blur(2px);
+}
+
+#loginScreen h2 {
+    color: #0ea5e9;
+    margin-bottom: 20px;
+    font-size: 28px;
+    text-shadow: 0 0 5px #0ea5e9;
+}
+
+#loginScreen input {
+    padding: 12px 20px;
+    border-radius: 40px;
+    border: none;
+    margin-top: 10px;
+    width: 260px;
+    text-align: center;
+    font-size: 18px;
+    background: #1e293b;
+    color: white;
+    outline: none;
+    border: 1px solid #0ea5e9;
+}
+
+#loginScreen input:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 8px #22c55e;
+}
+
+#loginScreen button {
+    background: linear-gradient(90deg, #0ea5e9, #22c55e);
+    border: none;
+    padding: 10px 28px;
+    border-radius: 40px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: transform 0.2s;
+}
+
+#loginScreen button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 12px #0ea5e9;
+}
+
+/* 📊 Original Design - fully preserved */
 header {
     background: linear-gradient(90deg, #0ea5e9, #22c55e);
     padding: 15px;
@@ -41,6 +104,12 @@ header {
 .card h2 {
     cursor: pointer;
     font-size: 16px;
+    user-select: none;
+    transition: color 0.2s;
+}
+
+.card h2:hover {
+    color: #22c55e;
 }
 
 @media (min-width: 768px) {
@@ -94,6 +163,7 @@ tr:hover {
     text-align: center;
     font-weight: bold;
     font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .hidden {
@@ -108,109 +178,177 @@ button {
     color: white;
     cursor: pointer;
 }
+
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+    background: #020617;
+    border-top: 1px solid #334155;
+    font-size: 14px;
+}
 </style>
 
 <script>
-function toggle(id){
+// 🔐 Password protection logic (Password: 1234)
+function checkPassword() {
+    var pass = document.getElementById("password").value;
+    var correct = "1234";   // ✅ You can change this password anytime
+
+    if (pass === correct) {
+        document.getElementById("loginScreen").style.display = "none";
+        // optional: small animation feedback
+    } else {
+        alert("Wrong password ❌ Access Denied");
+        // clear field for next attempt
+        document.getElementById("password").value = "";
+        document.getElementById("password").focus();
+    }
+}
+
+// allow pressing Enter key inside password field
+function handleKeyPress(event) {
+    if (event.key === "Enter") {
+        checkPassword();
+    }
+}
+
+// 📂 Toggle function for collapsible cards (original functionality)
+function toggle(id) {
     var x = document.getElementById(id);
-    x.classList.toggle("hidden");
+    if (x) {
+        x.classList.toggle("hidden");
+    }
 }
 </script>
-
 </head>
 
 <body>
 
+<!-- 🔐 Login Screen Block (fullscreen) -->
+<div id="loginScreen">
+    <h2>🔒 Engosoft Inventory</h2>
+    <input type="password" id="password" placeholder="Enter password" onkeypress="handleKeyPress(event)" autofocus>
+    <button onclick="checkPassword()">🔓 Unlock Report</button>
+    <p style="margin-top: 25px; font-size: 12px; color: #94a3b8;">🔐 Authorized access only</p>
+</div>
+
+<!-- ========== MAIN REPORT CONTENT (hidden until password) ========== -->
 <header>Engosoft IT Inventory Report 🚀</header>
 
 <div class="container">
 
-<div class="summary">
-    <div class="box">Total PCs: 23</div>
-    <div class="box">Printers: 1</div>
-    <div class="box">Cameras: 34</div>
-    <div class="box">DVR: 4</div>
-    <div class="box">Switches: 7</div>
-    <div class="box">Keyboards: 80</div>
+    <!-- Summary cards (same as original) -->
+    <div class="summary">
+        <div class="box">Total PCs: 23</div>
+        <div class="box">Printers: 1</div>
+        <div class="box">Cameras: 34</div>
+        <div class="box">DVR: 4</div>
+        <div class="box">Switches: 7</div>
+        <div class="box">Keyboards: 80</div>
+    </div>
+
+    <!-- 1️⃣ PCs Section -->
+    <div class="card">
+        <h2 onclick="toggle('pcs')">💻 PCs (click to toggle)</h2>
+        <div id="pcs" class="hidden table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>Model</th><th>Count</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>HP Compaq 8300</td><td>10</td></tr>
+                    <tr><td>HP Compaq 6305</td><td>3</td></tr>
+                    <tr><td>HP Compaq 4300</td><td>1</td></tr>
+                    <tr><td>HP Z400</td><td>1</td></tr>
+                    <tr><td>HP Pro 3500</td><td>1</td></tr>
+                    <tr><td>Dell Optiplex 9010</td><td>1</td></tr>
+                    <tr><td>Generic</td><td>7</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 2️⃣ Printers Section -->
+    <div class="card">
+        <h2 onclick="toggle('printers')">🖨 Printers (click to toggle)</h2>
+        <div id="printers" class="hidden table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>Model</th><th>Serial</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Brother</td><td>A78664B0H447506</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 3️⃣ Cameras & DVR Section (fully original) -->
+    <div class="card">
+        <h2 onclick="toggle('cams')">📷 Cameras & DVR (click to toggle)</h2>
+        <div id="cams" class="hidden table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>Type</th><th>Model</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>DVR</td><td>Hikvision 774443858</td></tr>
+                    <tr><td>DVR</td><td>Unknown</td></tr>
+                    <tr><td>DVR</td><td>Unknown</td></tr>
+                    <tr><td>DVR</td><td>Unknown</td></tr>
+                    <tr><td>Hikvision Camera</td><td>Multiple Models (34 units)</td></tr>
+                    <tr><td>Magtrade Camera</td><td>349-4 (4 units)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 4️⃣ Switches Section (complete) -->
+    <div class="card">
+        <h2 onclick="toggle('switches')">🔌 Switches (click to toggle)</h2>
+        <div id="switches" class="hidden table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>Brand</th><th>Model</th><th>Ports</th><th>Count</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Linksys</td><td>LGS124V2</td><td>24</td><td>2</td></tr>
+                    <tr><td>Linksys</td><td>LGS116</td><td>16</td><td>2</td></tr>
+                    <tr><td>TP-Link</td><td>LGSG1024D</td><td>24</td><td>1</td></tr>
+                    <tr><td>D-Link</td><td>DAS1016D</td><td>16</td><td>2</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 5️⃣ Keyboards Section -->
+    <div class="card">
+        <h2 onclick="toggle('kb')">⌨ Keyboards (click to toggle)</h2>
+        <div id="kb" class="hidden table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>Brand</th><th>Count</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Dell</td><td>16</td></tr>
+                    <tr><td>Microsoft Wireless</td><td>6</td></tr>
+                    <tr><td>Unknown</td><td>25</td></tr>
+                    <tr><td>Logitech</td><td>2</td></tr>
+                    <tr><td>Lenovo</td><td>4</td></tr>
+                    <tr><td>HP</td><td>27</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
-<div class="card">
-<h2 onclick="toggle('pcs')">💻 PCs</h2>
-<div id="pcs" class="hidden table-wrapper">
-<table>
-<tr><th>Model</th><th>Count</th></tr>
-<tr><td>HP Compaq 8300</td><td>10</td></tr>
-<tr><td>HP Compaq 6305</td><td>3</td></tr>
-<tr><td>HP Compaq 4300</td><td>1</td></tr>
-<tr><td>HP Z400</td><td>1</td></tr>
-<tr><td>HP Pro 3500</td><td>1</td></tr>
-<tr><td>Dell Optiplex 9010</td><td>1</td></tr>
-<tr><td>Generic</td><td>7</td></tr>
-</table>
-</div>
-</div>
-
-<div class="card">
-<h2 onclick="toggle('printers')">🖨 Printers</h2>
-<div id="printers" class="hidden table-wrapper">
-<table>
-<tr><th>Model</th><th>Serial</th></tr>
-<tr><td>Brother</td><td>A78664B0H447506</td></tr>
-</table>
-</div>
-</div>
-
-<div class="card">
-<h2 onclick="toggle('cams')">📷 Cameras & DVR</h2>
-<div id="cams" class="hidden table-wrapper">
-<table>
-<tr><th>Type</th><th>Model</th></tr>
-<tr><td>DVR</td><td>Hikvision 774443858</td></tr>
-<tr><td>DVR</td><td>Unknown</td></tr>
-<tr><td>DVR</td><td>Unknown</td></tr>
-<tr><td>DVR</td><td>Unknown</td></tr>
-<tr><td>Hikvision Camera</td><td>Multiple Models (34 units)</td></tr>
-<tr><td>Magtrade Camera</td><td>349-4 (4 units)</td></tr>
-</table>
-</div>
-</div>
-
-<div class="card">
-<h2 onclick="toggle('switches')">🔌 Switches</h2>
-<div id="switches" class="hidden table-wrapper">
-<table>
-<tr><th>Brand</th><th>Model</th><th>Ports</th><th>Count</th></tr>
-<tr><td>Linksys</td><td>LGS124V2</td><td>24</td><td>2</td></tr>
-<tr><td>Linksys</td><td>LGS116</td><td>16</td><td>2</td></tr>
-<tr><td>TP-Link</td><td>LGSG1024D</td><td>24</td><td>1</td></tr>
-<tr><td>D-Link</td><td>DAS1016D</td><td>16</td><td>2</td></tr>
-</table>
-</div>
-</div>
-
-<div class="card">
-<h2 onclick="toggle('kb')">⌨ Keyboards</h2>
-<div id="kb" class="hidden table-wrapper">
-<table>
-<tr><th>Brand</th><th>Count</th></tr>
-<tr><td>Dell</td><td>16</td></tr>
-<tr><td>Microsoft Wireless</td><td>6</td></tr>
-<tr><td>Unknown</td><td>25</td></tr>
-<tr><td>Logitech</td><td>2</td></tr>
-<tr><td>Lenovo</td><td>4</td></tr>
-<tr><td>HP</td><td>27</td></tr>
-</table>
-</div>
-</div>
-
-</div>
-
-
-<footer style="text-align:center; padding:20px; margin-top:20px; background:#020617; border-top:1px solid #334155; font-size:14px;">
+<footer>
     <p>👨‍💻 This report was prepared by the IT Team under the supervision of the IT Manager</p>
-    <p>Prepared by: <strong>Mostafa Morsi</strong></p>
-    <p>IT Manager: <strong>Hassan Waheed</strong></p>
+    <p>Prepared by ( IT Specialist): <strong>Eng Mostafa Morsi</strong></p>
+    <p>IT Manager: <strong>Eng Hassan Waheed</strong></p>
 </footer>
 
 </body>
 </html>
+```
