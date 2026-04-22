@@ -1,5 +1,3 @@
-Here is the complete HTML code that combines your original inventory report with a password-protected login screen.
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -190,36 +188,76 @@ footer {
 </style>
 
 <script>
-// 🔐 Password protection logic (Password: 1234)
-function checkPassword() {
-    var pass = document.getElementById("password").value;
-    var correct = "1234";   // ✅ You can change this password anytime
 
-    if (pass === correct) {
-        document.getElementById("loginScreen").style.display = "none";
-        // optional: small animation feedback
-    } else {
-        alert("Wrong password ❌ Access Denied");
-        // clear field for next attempt
-        document.getElementById("password").value = "";
-        document.getElementById("password").focus();
+
+const CORRECT_HASH = "5f19908bd601c85a32ca6c7cb292c4d95b7d852163a7f896f10d4d48c3c92498682540cbe7609571a66065dc2ba806fd5781e908a01a82b2af077ec9734de1cf";
+
+// Helper function to convert string to SHA-256 hash
+async function sha256(message) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+}
+
+// Password verification function
+async function checkPassword() {
+    const passwordInput = document.getElementById("password");
+    const enteredPassword = passwordInput.value;
+    
+    if (!enteredPassword) {
+        alert("Please enter a password 🔐");
+        return;
+    }
+    
+    // Show loading indicator on button (optional)
+    const loginBtn = document.querySelector("#loginScreen button");
+    const originalBtnText = loginBtn.innerText;
+    loginBtn.innerText = "Verifying...";
+    loginBtn.disabled = true;
+    
+    try {
+        // Hash the entered password using SHA-256
+        const hashedInput = await sha256(enteredPassword);
+        
+        // Compare with the stored hash
+        if (hashedInput === CORRECT_HASH) {
+            // Correct password - hide login screen
+            document.getElementById("loginScreen").style.display = "none";
+        } else {
+            // Wrong password
+            alert("❌ Wrong password! Access denied.");
+            passwordInput.value = "";
+            passwordInput.focus();
+        }
+    } catch (error) {
+        console.error("Hash error:", error);
+        alert("An error occurred. Please try again.");
+    } finally {
+        // Restore button state
+        loginBtn.innerText = originalBtnText;
+        loginBtn.disabled = false;
     }
 }
 
-// allow pressing Enter key inside password field
+// Allow pressing Enter key inside password field
 function handleKeyPress(event) {
     if (event.key === "Enter") {
         checkPassword();
     }
 }
 
-// 📂 Toggle function for collapsible cards (original functionality)
+// 📂 Toggle function for collapsible cards
 function toggle(id) {
-    var x = document.getElementById(id);
-    if (x) {
-        x.classList.toggle("hidden");
+    const element = document.getElementById(id);
+    if (element) {
+        element.classList.toggle("hidden");
     }
 }
+
+// Optional: Add small note in console for developers (doesn't reveal password)
+console.log("%c🔒 Engosoft Inventory - Password protected (SHA-256 hashed)", "color: #22c55e; font-size: 14px;");
 </script>
 </head>
 
@@ -230,15 +268,15 @@ function toggle(id) {
     <h2>🔒 Engosoft Inventory</h2>
     <input type="password" id="password" placeholder="Enter password" onkeypress="handleKeyPress(event)" autofocus>
     <button onclick="checkPassword()">🔓 Unlock Report</button>
-    <p style="margin-top: 25px; font-size: 12px; color: #94a3b8;">🔐 Authorized access only</p>
+    <p style="margin-top: 25px; font-size: 12px; color: #94a3b8;">🔐 SHA-256 secured · Authorized access only</p>
 </div>
 
-<!-- ========== MAIN REPORT CONTENT (hidden until password) ========== -->
+<!-- ========== MAIN REPORT CONTENT ========== -->
 <header>Engosoft IT Inventory Report 🚀</header>
 
 <div class="container">
 
-    <!-- Summary cards (same as original) -->
+    <!-- Summary cards -->
     <div class="summary">
         <div class="box">Total PCs: 23</div>
         <div class="box">Printers: 1</div>
@@ -284,7 +322,7 @@ function toggle(id) {
         </div>
     </div>
 
-    <!-- 3️⃣ Cameras & DVR Section (fully original) -->
+    <!-- 3️⃣ Cameras & DVR Section -->
     <div class="card">
         <h2 onclick="toggle('cams')">📷 Cameras & DVR (click to toggle)</h2>
         <div id="cams" class="hidden table-wrapper">
@@ -304,7 +342,7 @@ function toggle(id) {
         </div>
     </div>
 
-    <!-- 4️⃣ Switches Section (complete) -->
+    <!-- 4️⃣ Switches Section -->
     <div class="card">
         <h2 onclick="toggle('switches')">🔌 Switches (click to toggle)</h2>
         <div id="switches" class="hidden table-wrapper">
@@ -345,10 +383,9 @@ function toggle(id) {
 
 <footer>
     <p>👨‍💻 This report was prepared by the IT Team under the supervision of the IT Manager</p>
-    <p>Prepared by ( IT Specialist): <strong>Eng Mostafa Morsi</strong></p>
-    <p>IT Manager: <strong>Eng Hassan Waheed</strong></p>
+    <p>Prepared by: <strong>Mostafa Morsi</strong></p>
+    <p>IT Manager: <strong>Hassan Waheed</strong></p>
 </footer>
 
 </body>
 </html>
-```
