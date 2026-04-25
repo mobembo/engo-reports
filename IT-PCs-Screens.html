@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Inventory Report</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+    margin: 0;
+}
+
+/* 🔐 Login Screen */
+#loginScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #020617;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 9999;
+}
+
+#loginScreen h2 {
+    color: #0ea5e9;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+#loginScreen input {
+    padding: 12px 20px;
+    border-radius: 40px;
+    border: none;
+    width: 260px;
+    text-align: center;
+    font-size: 18px;
+    background: #1e293b;
+    color: white;
+    border: 1px solid #0ea5e9;
+}
+
+#loginScreen button {
+    margin-top: 15px;
+    padding: 10px 28px;
+    border-radius: 40px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(90deg,#0ea5e9,#22c55e);
+    color: white;
+    font-weight: bold;
+}
+
+/* Main */
+header {
+    background: linear-gradient(90deg,#0ea5e9,#22c55e);
+    padding: 15px;
+    text-align: center;
+    font-size: 24px;
+}
+
+.container {
+    padding: 20px;
+}
+
+.box {
+    background: #22c55e;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 10px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.box1 {
+    background: #c52222;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 10px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.card {
+    background: #1e293b;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #334155;
+}
+
+tr:hover {
+    background: #334155;
+}
+
+.hidden {
+    display: none;
+}
+</style>
+
+<script>
+const CORRECT_HASH = "eec2973273c7ea9a136fda5c0f2d465aadaba0d62fccbb44631bfad6da46a5cf";
+
+async function sha256(message) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function checkPassword() {
+    const pass = document.getElementById("password").value;
+
+    if(!pass){
+        alert("Enter password");
+        return;
+    }
+
+    const hash = await sha256(pass);
+
+    if(hash === CORRECT_HASH){
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
+    } else {
+        alert("Wrong password ❌");
+    }
+}
+
+function handleKeyPress(e){
+    if(e.key === "Enter") checkPassword();
+}
+
+function toggle(id){
+    document.getElementById(id).classList.toggle("hidden");
+}
+</script>
+
+</head>
+
+<body>
+
+<!-- 🔐 LOGIN -->
+<div id="loginScreen">
+    <h2>🔒 Inventory Access</h2>
+    <input type="password" id="password" placeholder="Enter password" onkeypress="handleKeyPress(event)">
+    <button onclick="checkPassword()">Unlock</button>
+</div>
+
+<!-- 🔥 MAIN CONTENT -->
+<div id="mainContent" style="display:none;">
+
+<header>🚀 IT Inventory Report</header>
+
+<div class="container">
+
+<h2>Summary</h2>
+<div class="box">Working Screens: 27</div>
+<div class="box1">Not Working Screens: 7</div>
+<div class="box">Total PCs: 11</div>
+
+<div class="card">
+<h2 onclick="toggle('pcTable')" style="cursor:pointer;">💻 PCs</h2>
+
+<div id="pcTable" class="hidden">
+<table>
+<tr>
+<th>Model</th>
+<th>RAM</th>
+<th>HDD</th>
+<th>Serial</th>
+</tr>
+
+<tr>
+<td>Dell Optiplex</td>
+<td>8 GB</td>
+<td>256 GB</td>
+<td>59KVZ12</td>
+</tr>
+
+<tr>
+<td>HP Z400</td>
+<td>8 GB</td>
+<td>N/A</td>
+<td>CZC1012ZS9</td>
+</tr>
+
+<tr>
+<td>HP Z400</td>
+<td>8 GB</td>
+<td>N/A</td>
+<td>2UA14206JB</td>
+</tr>
+
+<tr>
+<td>HP Compaq 8100</td>
+<td>8 GB</td>
+<td>256 GB</td>
+<td>CZC0222MCD</td>
+</tr>
+
+<tr>
+<td>HP Z400</td>
+<td>8 GB</td>
+<td>N/A</td>
+<td>2UA2310YJL</td>
+</tr>
+
+<tr>
+<td>HP Z400</td>
+<td>8 GB</td>
+<td>N/A</td>
+<td>2UA1480R57</td>
+</tr>
+
+<tr>
+<td>Dell</td>
+<td>32 GB</td>
+<td>N/A</td>
+<td>D4R7KF2</td>
+</tr>
+
+<tr>
+<td>Dell</td>
+<td>32 GB</td>
+<td>500 / 512</td>
+<td>6W6MFB2</td>
+</tr>
+
+<tr>
+<td>HP Z400</td>
+<td>8 GB</td>
+<td>500 GB</td>
+<td>2UA0321PBL</td>
+</tr>
+
+<tr>
+<td>HP Z400</td>
+<td>8 GB</td>
+<td>N/A</td>
+<td>2UA1021Q78</td>
+</tr>
+
+<tr>
+<td>HP Z400</td>
+<td>8 GB</td>
+<td>N/A</td>
+<td>2UA14206JM</td>
+</tr>
+
+</table>
+</div>
+</div>
+
+<p style="margin-top:20px;color:#94a3b8;">
+Generated at: 2026-04-25 15:32
+</p>
+
+</div>
+
+<footer style="text-align:center; padding:20px; background:#020617;">
+<p>Prepared by: Mostafa Morsi</p>
+<p>IT Manager: Hassan Waheed</p>
+</footer>
+
+</div>
+
+</body>
+</html>
